@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+
+<?php
+
+require_once dirname( __DIR__, 3 ) . '/codeception/codeception/autoload.php';
+
+use SkyVerge\Lumiere\App;
+use SkyVerge\Lumiere\Command;
+
+$app = new App(App::NAME, App::VERSION );
+
+$app->add( new Command\Up( Command\Up::NAME ) );
+
+$app->run();

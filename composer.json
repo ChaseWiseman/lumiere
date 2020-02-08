@@ -1,0 +1,15 @@
+{
+  "name": "skyverge/lumiere",
+  "description": "Test",
+  "license": "GPL-2.0+",
+  "require": {
+    "lucatume/wp-browser": "^2.2"
+  },
+  "autoload":{
+    "psr-4":{
+      "SkyVerge\\Lumiere\\": "src",
+      "Codeception\\": "src/Codeception"
+    }
+  },
+  "bin":["bin/lumiere"]
+}
