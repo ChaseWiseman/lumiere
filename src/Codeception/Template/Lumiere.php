@@ -39,6 +39,9 @@ class Lumiere extends Wpbrowser {
 	/** @var string filename for the dist .env */
 	protected $distEnvFilename;
 
+	/** @var array files to add to .gitignore after setup */
+	protected $toIgnore = [];
+
 
 	/**
 	 * Initializes the build commands.
@@ -67,6 +70,7 @@ class Lumiere extends Wpbrowser {
 
 		$this->createFrontendSuite();
 
+		$this->updateGitIgnore();
 
 		$this->saySuccess( 'You did it!' );
 
@@ -205,6 +209,8 @@ class Lumiere extends Wpbrowser {
 
 		$this->writeEnvFile( $filename, $installation_data );
 
+		$this->toIgnore[] = $this->envFileName;
+
 		if ( ! empty( $installation_data['plugin'] ) ) {
 
 			$this->distEnvFilename = '.env.lumiere.dist';
@@ -272,7 +278,7 @@ class Lumiere extends Wpbrowser {
 
 		$contents = Yaml::dump( $config, 4 );
 
-		$this->createFile( 'codeception.dist.yml', $contents );
+		$this->createFile( $this->workDir . DIRECTORY_SEPARATOR . 'codeception.dist.yml', $contents );
 
 		// create codeception.yml
 		$config = [
@@ -294,7 +300,9 @@ class Lumiere extends Wpbrowser {
 
 		$contents = Yaml::dump( $config, 4 );
 
-		$this->createFile( 'codeception.yml', $contents );
+		$this->createFile( $this->workDir . DIRECTORY_SEPARATOR . 'codeception.yml', $contents );
+
+		$this->toIgnore[] = 'codeception.yml';
 	}
 
 
@@ -381,6 +389,35 @@ EOF;
 		// create the dist config file
 		$this->createFile( 'tests' . DIRECTORY_SEPARATOR . "$name.suite.dist.yml", $dist_config );
 	}
+
+
+	/**
+	 * Updates the project's .gitignore file with our added directories and config files.
+	 */
+	protected function updateGitIgnore() {
+
+		$toIgnore = implode( "\n", $this->toIgnore );
+
+		$content = <<<EOF
+
+# Lumiere
+{$toIgnore}
+EOF;
+
+		$filename = $this->workDir . DIRECTORY_SEPARATOR . self::GIT_IGNORE;
+
+		if ( file_exists( $filename ) ) {
+
+			$file = fopen( $filename, 'a' );
+
+			fwrite( $file, $content );
+
+			fclose( $file );
+
+		} else {
+
+			$this->createFile( $filename, $content );
+		}
 	}
 
 
