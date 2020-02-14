@@ -1,7 +1,8 @@
 <?php
 
-namespace SkyVerge\Lumiere\Tests\Acceptance;
+namespace SkyVerge\Lumiere\Tests\Admin;
 
+use SkyVerge\Lumiere\Tests\AcceptanceBase;
 use Codeception\Exception\ModuleException;
 
 /**
@@ -9,7 +10,7 @@ use Codeception\Exception\ModuleException;
  *
  * get_settings_links() can be extended to return the expected set of links.
  */
-abstract class PluginPageLinksCest extends Base {
+abstract class PluginPageLinksCest extends AcceptanceBase {
 
 
 	/**

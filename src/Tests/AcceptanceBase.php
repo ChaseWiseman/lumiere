@@ -1,6 +1,6 @@
 <?php
 
-namespace SkyVerge\Lumiere\Tests\Acceptance;
+namespace SkyVerge\Lumiere\Tests;
 
 use Codeception\Actor;
 use Codeception\Module\WPWebDriver;
@@ -8,7 +8,7 @@ use Codeception\Module\WPWebDriver;
 /**
  * The base acceptance test class.
  */
-abstract class Base {
+abstract class AcceptanceBase {
 
 
 	/** @var WPWebDriver|Actor our tester */
