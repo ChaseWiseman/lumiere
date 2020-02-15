@@ -7,11 +7,11 @@
 
 modules:
   enabled:
-  - WPDb
-  - WPWebDriver
+  - WooCommerceDB
+  - WooCommerceBrowser
   - WPLoader
   config:
-    WPDb:
+    WooCommerceDB:
       dsn: 'mysql:host=%ACCEPTANCE_DB_HOST%;dbname=%ACCEPTANCE_DB_NAME%'
       user: '%ACCEPTANCE_DB_USER%'
       password: '%ACCEPTANCE_DB_PASSWORD%'
@@ -24,7 +24,7 @@ modules:
       url: '%WP_URL%'
       urlReplacement: true #replace the hardcoded dump URL with the one above
       tablePrefix: '%ACCEPTANCE_TABLE_PREFIX%'
-    WPWebDriver:
+    WooCommerceBrowser:
       url: '%WP_URL%'
       adminUsername: '%WP_ADMIN_USERNAME%'
       adminPassword: '%WP_ADMIN_PASSWORD%'
