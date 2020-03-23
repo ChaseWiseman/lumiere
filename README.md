@@ -1,5 +1,5 @@
 ## Getting started
-Lumiere is designed to get a functioning test suite up and running with minimal plugin-level configuration. The majority of the options defined in Codeception's `.yml` configuration files is the same for all plugins, so this consolidates them into a shared configuration in `/configs`. Improvements can be inherited by all plugins with a composer update.
+Lumiere is designed to get a functioning test suite up and running with minimal plugin-level configuration. The majority of the options defined in Codeception's `.yml` configuration files is the same for all plugins, so this consolidates them into a set of [shared configurations](configs). Improvements can be inherited by all plugins with a composer update.
 
 ### Prerequisites
 - A fresh and isolated WordPress installation. **IMPORTANT:** <u>Do not use this installation for any other purpose, including performing manual tests. It should be reserved to acceptance tests</u>. Any changes might cause a problem with the test suite; any tests run by the suite might be destructive of the changes you made as well. To run manual tests you should dedicate a different installation.
@@ -71,9 +71,9 @@ Each generated test suite has its own set of configuration files.
     
 ### Modules
 
-#### WooCommerceDB
+#### [WooCommerceDB](src/Codeception/Module/WooCommerceDB.php)
 A wrapper for WPDb, this provides common methods that are often used in acceptance tests to generate and interact with WooCommerce database data. This can be used for things like creating products and orders.
 
-#### WooCommerceBrowser
+#### [WooCommerceBrowser](src/Codeception/Module/WooCommerceBrowser.php)
 A wrapper for WPWebDriver, this adds common methods for various WooCommerce-related acceptance test actions like going directly to the card or product pages.
 
