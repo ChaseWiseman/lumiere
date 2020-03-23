@@ -25,6 +25,8 @@ For now, tests can be run using standard Codeception commands:
 - `vendor/bin/codecept run integration`
 - `vendor/bin/codecept run unit`
 
+## Details
+
 ### Suites
 On installation, this library configures 4 common suites for running different types of tests:
 - Unit tests
@@ -37,7 +39,7 @@ As with the Codeception library that this library is built on, any number or com
 ### Configuration
 A number of configuration files are generated automatically, and all can be overridden as needed.
 
-### Global configuration
+#### Global configuration
 - `codeception.dist.yml`
     - Holds any configuration values that are specific to the plugin and should also be default for everyone running tests
     - Inherits and overrides the base `configs/codeception.yml` configuration in this package
@@ -47,7 +49,7 @@ A number of configuration files are generated automatically, and all can be over
     - Inherits and overrides `codeception.dist.yml`
     - Should not be committed
     
-### Suite configuration
+#### Suite configuration
 Each generated test suite has its own set of configuration files.
 
 - `{suite}.suite.dist.yml`
@@ -59,7 +61,7 @@ Each generated test suite has its own set of configuration files.
     - Inherits and overrides `{suite}.suite.dist.yml`
     - Should not be committed
     
-### Environment configuration
+#### Environment configuration
 - `.env.lumiere`
     - Holds all variables for your local WordPress installation
     - Should not be committed
@@ -67,11 +69,11 @@ Each generated test suite has its own set of configuration files.
     - Holds all variables that are specific to the plugin and should also be available for everyone running the test suite
     - Should be committed
     
-## Modules
+### Modules
 
-### WooCommerceDB
+#### WooCommerceDB
 A wrapper for WPDb, this provides common methods that are often used in acceptance tests to generate and interact with WooCommerce database data. This can be used for things like creating products and orders.
 
-### WooCommerceBrowser
+#### WooCommerceBrowser
 A wrapper for WPWebDriver, this adds common methods for various WooCommerce-related acceptance test actions like going directly to the card or product pages.
 
