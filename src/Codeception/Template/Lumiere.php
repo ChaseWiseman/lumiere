@@ -135,7 +135,7 @@ class Lumiere extends Wpbrowser {
 		);
 
 		$installation_data['ACCEPTANCE_DB_PASSWORD'] = $this->ask(
-			'What is the username for the database you\'ll use for acceptance tests?',
+			'What is the password for the database you\'ll use for acceptance tests?',
 			'root'
 		);
 
@@ -160,7 +160,7 @@ class Lumiere extends Wpbrowser {
 		);
 
 		$installation_data['INTEGRATION_DB_PASSWORD'] = $this->ask(
-			'What is the username for the database you\'ll use for integration tests?',
+			'What is the password for the database you\'ll use for integration tests?',
 			'root'
 		);
 
