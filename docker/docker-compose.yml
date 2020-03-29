@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+  codeception:
+    build: codeception
+    depends_on:
+      - wordpress
+    environment:
+      - WP_CLI_CACHE_DIR=/wordpress/.wp-cli/cache
+    volumes:
+      - wordpress:/wordpress
+
+  wordpress:
+    build: wordpress
+    depends_on:
+      - mysql
+      - chrome
+    hostname: wp.test
+    networks:
+      default:
+        aliases:
+          - wp.test
+    volumes:
+      - wordpress:/var/www/html
+    ports:
+      - "8080:80"
+      - "8443:443"
+
+  mysql:
+    image: mariadb
+    environment:
+       MYSQL_ROOT_PASSWORD: root
+
+  chrome:
+    image: selenium/standalone-chrome-debug:3.141.59-dubnium
+    environment:
+      - DBUS_SESSION_BUS_ADDRESS=/dev/null
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+
+volumes:
+  wordpress:
