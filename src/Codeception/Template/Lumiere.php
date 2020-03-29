@@ -144,6 +144,11 @@ class Lumiere extends Wpbrowser {
 			'wp_'
 		);
 
+		$installation_data['SELENIUM_HOST'] = $this->ask(
+			'What is the host of the Selenium server you\'ll use for acceptance tests?',
+			'localhost'
+		);
+
 		$installation_data['INTEGRATION_DB_NAME'] = $this->ask(
 			'What is the name of the database you\'ll use for integration tests?',
 			'integration_tests'
