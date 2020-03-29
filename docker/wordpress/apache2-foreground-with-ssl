@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -f /etc/ssl/localcerts/apache.pem ]; then
+
+	mkdir -p /etc/ssl/localcerts
+	openssl req -new -x509 -days 365 -nodes -out /etc/ssl/localcerts/apache.pem -keyout /etc/ssl/localcerts/apache.key -subj "/C=US"
+	chmod 600 /etc/ssl/localcerts/apache*
+
+	a2enmod ssl
+
+	sed -e 's/certs\/ssl-cert-snakeoil.pem/localcerts\/apache.pem/' -ibak /etc/apache2/sites-available/default-ssl.conf
+	sed -e 's/private\/ssl-cert-snakeoil.key/localcerts\/apache.key/' -ibak /etc/apache2/sites-available/default-ssl.conf
+
+	a2ensite default-ssl
+fi
+
+exec apache2-foreground
