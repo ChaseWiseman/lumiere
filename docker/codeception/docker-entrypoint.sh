@@ -103,7 +103,9 @@ PHP
 	# install vendor
 	composer install --prefer-dist
 
-	# allow each plugin to configure the wordpress instance
+	wp plugin activate $PLUGIN_DIR --path=/wordpress
+
+	# allow each plugin to configure the WordPress instance
 	if [ -f wp-bootstrap.sh ]; then
 		source wp-bootstrap.sh
 	fi

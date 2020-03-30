@@ -7,6 +7,7 @@ services:
       - wordpress
     environment:
       - WP_CLI_CACHE_DIR=/wordpress/.wp-cli/cache
+      - PLUGIN_DIR=$PLUGIN_DIR
     volumes:
       - wordpress:/wordpress
 
