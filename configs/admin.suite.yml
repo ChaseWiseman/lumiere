@@ -30,7 +30,7 @@ modules:
       adminPassword: '%WP_ADMIN_PASSWORD%'
       adminPath: '%WP_ADMIN_PATH%'
       browser: 'chrome'
-      host: '%SELENIUM_HOST'
+      host: '%SELENIUM_HOST%'
       capabilities:
         acceptInsecureCerts: true
         enableVerboseLogging: true
