@@ -109,7 +109,7 @@ PHP
 	fi
 
 
-	echo "Generating tests/_data/dump.sql"
+	echo "Exporting acceptance_tests database into tests/_data/dump.sql"
 
 	cd /wordpress
 
@@ -118,9 +118,9 @@ PHP
 	wp db export /project/tests/_data/dump.sql
 
 
-	echo "Importing tests/_data/dump.sql into the integration_tests database"
+	echo "Importing tests/_data/dump.sql into integration_tests database"
 
-	mysql -h$DB_HOST -u$DB_USER -p$DB_PASSWORD integration_tests -e 'source /project/tests/_data/dump.sql'
+	wp db import --dbuser=$DB_USER --dbpass=$DB_PASSWORD --host=$DB_HOST --database=integration_tests /project/tests/_data/dump.sql
 
 
 	echo "WordPress is ready"
