@@ -411,6 +411,26 @@ EOF;
 	 */
 	protected function updateGitIgnore() {
 
+		$filename = $this->workDir . DIRECTORY_SEPARATOR . self::GIT_IGNORE;
+
+		// check the existing gitignore for these entries
+		if ( file_exists( $filename ) ) {
+
+			$contents = file_get_contents( $filename );
+
+			foreach ( $this->toIgnore as $key => $file_to_ignore ) {
+
+				if ( false !== strpos( $contents, $file_to_ignore ) ) {
+					unset( $this->toIgnore[ $key ] );
+				}
+			}
+		}
+
+		// if all entries are duplicates, bail
+		if ( empty( $this->toIgnore ) ) {
+			return;
+		}
+
 		$toIgnore = implode( "\n", $this->toIgnore );
 
 		$content = <<<EOF
