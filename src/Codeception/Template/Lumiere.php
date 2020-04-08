@@ -37,7 +37,7 @@ class Lumiere extends Wpbrowser {
 
 
 	/** @var string filename for the dist .env */
-	protected $distEnvFilename;
+	protected $distEnvFilename = '.env.lumiere.dist';
 
 	/** @var array files to add to .gitignore after setup */
 	protected $toIgnore = [];
@@ -49,6 +49,9 @@ class Lumiere extends Wpbrowser {
 	 * @param bool $interactive unused
 	 */
 	public function setup( $interactive = true ) {
+
+		// local config env file
+		$this->envFileName = '.env.lumiere';
 
 		$this->say( "Bootstrapping Lumiere\n" );
 
@@ -79,99 +82,125 @@ class Lumiere extends Wpbrowser {
 
 
 	/**
+	 * Loads environment variables.
+	 *
+	 * @param string $filename .env filename, if any. Defaults to the value of $envFileName
+	 */
+	protected function loadEnvFile( $filename = '' ) {
+
+		if ( $filename ) {
+
+			if ( file_exists( $this->workDir . DIRECTORY_SEPARATOR .  $filename ) ) {
+				$dotEnv = \Dotenv\Dotenv::create( $this->workDir, $filename );
+				$dotEnv->load();
+			}
+
+		} else {
+
+			parent::loadEnvFile();
+		}
+	}
+
+
+	/**
 	 * Gather installation data via CLI prompts.
 	 *
 	 * @return array
 	 */
 	protected function gatherInstallationData() : array {
 
+		$this->loadEnvFile( $this->envFileName );
+
 		$installation_data = [];
 
 		$wp_root = $this->ask(
 			'Where is your test instance of WordPress installed?',
-			'/var/www/wp'
+			getenv( 'WP_ROOT_FOLDER' ) ?: '/var/www/wp'
 		);
 
 		$installation_data['WP_ROOT_FOLDER'] = $this->normalizePath( $wp_root );
 
 		$wp_url = $this->ask(
 			'What is the URL of the test site?',
-			'https://wp.test'
+			getenv( 'WP_URL' ) ?: 'https://wp.test'
 		);
 
 		$installation_data['WP_URL']    = $wp_url;
 		$installation_data['WP_DOMAIN'] = str_replace( [ 'https://', 'http://' ], '', $wp_url );
 
-		$installation_data['WP_ADMIN_PATH'] = '/wp-admin';
+		$installation_data['WP_ADMIN_PATH'] = getenv( 'WP_ADMIN_PATH' ) ?: '/wp-admin';
 
 		$installation_data['WP_ADMIN_EMAIL'] = $this->ask(
 			'What is the email address for your admin user?',
-			'admin@wp.test'
+			getenv( 'WP_ADMIN_EMAIL' ) ?: 'admin@wp.test'
 		);
 
 		$installation_data['WP_ADMIN_USERNAME'] = $this->ask(
 			'What is the username for your admin user?',
-			'admin'
+			getenv( 'WP_ADMIN_USERNAME' ) ?: 'admin'
 		);
 
 		$installation_data['WP_ADMIN_PASSWORD'] = $this->ask(
 			'What is the password for your admin user?',
-			'admin'
+			getenv( 'WP_ADMIN_PASSWORD' ) ?: 'admin'
 		);
 
 		$installation_data['ACCEPTANCE_DB_NAME'] = $this->ask(
 			'What is the name of the database you\'ll use for acceptance tests?',
-			'acceptance_tests'
+			getenv( 'ACCEPTANCE_DB_NAME' ) ?: 'acceptance_tests'
 		);
 
 		$installation_data['ACCEPTANCE_DB_HOST'] = $this->ask(
 			'What is the host of the database you\'ll use for acceptance tests?',
-			'localhost'
+			getenv( 'ACCEPTANCE_DB_HOST' ) ?: 'localhost'
 		);
 
 		$installation_data['ACCEPTANCE_DB_USER'] = $this->ask(
 			'What is the username for the database you\'ll use for acceptance tests?',
-			'root'
+			getenv( 'ACCEPTANCE_DB_USER' ) ?: 'root'
 		);
 
 		$installation_data['ACCEPTANCE_DB_PASSWORD'] = $this->ask(
 			'What is the username for the database you\'ll use for acceptance tests?',
-			'root'
+			getenv( 'ACCEPTANCE_DB_PASSWORD' ) ?: 'root'
 		);
 
 		$installation_data['ACCEPTANCE_TABLE_PREFIX'] = $this->ask(
 			'What is the table prefix for the database you\'ll use for acceptance tests?',
-			'wp_'
+			getenv( 'ACCEPTANCE_TABLE_PREFIX' ) ?: 'wp_'
 		);
 
 		$installation_data['INTEGRATION_DB_NAME'] = $this->ask(
 			'What is the name of the database you\'ll use for integration tests?',
-			'integration_tests'
+			getenv( 'INTEGRATION_DB_NAME' ) ?: 'integration_tests'
 		);
 
 		$installation_data['INTEGRATION_DB_HOST'] = $this->ask(
 			'What is the host of the database you\'ll use for integration tests?',
-			'localhost'
+			getenv( 'INTEGRATION_DB_HOST' ) ?: 'localhost'
 		);
 
 		$installation_data['INTEGRATION_DB_USER'] = $this->ask(
 			'What is the username for the database you\'ll use for integration tests?',
-			'root'
+			getenv( 'INTEGRATION_DB_USER' ) ?: 'root'
 		);
 
 		$installation_data['INTEGRATION_DB_PASSWORD'] = $this->ask(
 			'What is the username for the database you\'ll use for integration tests?',
-			'root'
+			getenv( 'INTEGRATION_DB_PASSWORD' ) ?: 'root'
 		);
 
 		$installation_data['INTEGRATION_TABLE_PREFIX'] = $this->ask(
 			'What is the table prefix for the database you\'ll use for integration tests?',
-			'wp_'
+			getenv( 'INTEGRATION_TABLE_PREFIX' ) ?: 'wp_'
 		);
 
-		$plugin_name      = $this->ask( 'What is the name of the plugin?' );
-		$plugin_directory = $this->ask( 'What is the plugin root directory when installed in WordPress?', basename( getcwd() ) );
-		$plugin_file      = $this->ask( 'What is the main filename for the plugin?', "{$plugin_directory}.php" );
+		// maybe use existing values if the env file already exists
+		$this->loadEnvFile( $this->distEnvFilename );
+
+		$plugin_name      = $this->ask( 'What is the name of the plugin?', getenv( 'PLUGIN_NAME' ) ?:  null );
+		$plugin_directory = $this->ask( 'What is the plugin root directory when installed in WordPress?', getenv( 'PLUGIN_DIR' ) ?:  basename( getcwd() ) );
+		$plugin_file      = $this->ask( 'What is the main filename for the plugin?', getenv( 'PLUGIN_FILENAME' ) ?:  "{$plugin_directory}.php" );
 
 		$installation_data['plugin'] = [
 			'name'      => $plugin_name,
@@ -202,9 +231,6 @@ class Lumiere extends Wpbrowser {
 	 */
 	protected function createEnvFiles( array $installation_data ) {
 
-		// local config env file
-		$this->envFileName = '.env.lumiere';
-
 		$filename = $this->workDir . DIRECTORY_SEPARATOR . $this->envFileName;
 
 		$this->writeEnvFile( $filename, $installation_data );
@@ -212,8 +238,6 @@ class Lumiere extends Wpbrowser {
 		$this->toIgnore[] = $this->envFileName;
 
 		if ( ! empty( $installation_data['plugin'] ) ) {
-
-			$this->distEnvFilename = '.env.lumiere.dist';
 
 			$data = [
 				'PLUGIN_NAME'     => $installation_data['plugin']['name'],
