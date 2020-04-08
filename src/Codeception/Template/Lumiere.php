@@ -208,15 +208,6 @@ class Lumiere extends Wpbrowser {
 			'filename'  => $plugin_file,
 		];
 
-		$installation_data['other_plugins'] = [];
-
-		$woocommerce = $this->ask( 'Does the plugin require WooCommerce?', 'yes' );
-		$woocommerce = preg_match( '/^(n|N)/', $woocommerce ) ? false : true;
-
-		if ( $woocommerce ) {
-			$installation_data['other_plugins'][] = 'woocommerce/woocommerce.php';
-		}
-
 		// TODO: ask about other plugins?
 		// TODO: ask about the framework? Install basic FW tests
 
