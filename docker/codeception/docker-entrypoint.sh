@@ -65,7 +65,9 @@ if ( 8443 === (int) $_SERVER['SERVER_PORT'] || 8080 === (int) $_SERVER['SERVER_P
 PHP
 	fi
 
+	wp core update
 	wp core update-db
+
 	wp rewrite structure '/%postname%/' --hard
 
 	wp db export fresh-install.sql
