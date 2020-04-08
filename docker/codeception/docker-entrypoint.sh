@@ -2,10 +2,11 @@
 
 wp_bootstrap() {
 
-	WP_URL=wp.test
+	WP_DOMAIN=wp.test
+	WP_URL="https://$WP_DOMAIN"
 	WP_ADMIN_USERNAME=admin
 	WP_ADMIN_PASSWORD=password
-	WP_ADMIN_EMAIL="admin@$WP_URL"
+	WP_ADMIN_EMAIL="admin@$WP_DOMAIN"
 	DB_HOST=mysql
 	DB_NAME=acceptance_tests
 	DB_USER=root
